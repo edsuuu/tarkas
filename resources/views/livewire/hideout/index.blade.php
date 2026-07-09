@@ -1,4 +1,29 @@
-<div x-data="{ open: null }">
+<div x-data="{
+    open: null,
+    expanded: null,
+    toggle(id) {
+        if (this.open === id) {
+            this.open = null;
+            this.$nextTick(() => {
+                if (this.open === null && this.expanded === id) {
+                    this.expanded = null;
+                }
+            });
+
+            return;
+        }
+
+        this.open = null;
+        this.$nextTick(() => {
+            this.expanded = id;
+            this.$nextTick(() => {
+                if (this.expanded === id) {
+                    this.open = id;
+                }
+            });
+        });
+    },
+}">
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-zinc-100">Hideout</h1>
         <p class="text-sm text-zinc-500">Estações, níveis e requisitos de upgrade</p>
@@ -33,29 +58,28 @@
         @foreach ($stations as $station)
             <div wire:key="station-{{ $station['id'] }}"
                  x-data="{ id: @js($station['id']) }"
-                 class="rounded-xl border bg-[#14171f]"
-                 :class="({{ $searching ? 'true' : 'open === id' }}) ? 'border-amber-500/30' : 'border-zinc-800'">
+                 class="min-w-0 overflow-hidden rounded-xl border bg-[#14171f]"
+                 :class="({{ $searching ? 'true' : 'expanded === id' }}) ? 'border-amber-500/30 md:col-span-2 xl:col-span-3' : 'border-zinc-800'">
                 <button type="button"
-                        @if (! $searching) @click="open = open === id ? null : id" @endif
-                        class="flex w-full items-center gap-3 p-4 text-left">
+                        @if (! $searching) @click="toggle(id)" @endif
+                        class="flex min-w-0 w-full items-center gap-3 p-4 text-left">
                     @if (! empty($station['imageLink']))
                         <img src="{{ $station['imageLink'] }}" alt="" class="h-10 w-10 shrink-0 object-contain" loading="lazy">
                     @endif
-                    <span class="flex-1 font-semibold"
-                          :class="({{ $searching ? 'true' : 'open === id' }}) ? 'text-amber-300' : 'text-zinc-100'">
+                    <span class="min-w-0 flex-1 break-words font-semibold"
+                          :class="({{ $searching ? 'true' : 'expanded === id' }}) ? 'text-amber-300' : 'text-zinc-100'">
                         {{ $station['name'] }}
                     </span>
-                    <span class="text-xs text-zinc-500">{{ count($station['levels'] ?? []) }} {{ $searching ? 'nível(is) com o item' : 'níveis' }}</span>
+                    <span class="shrink-0 text-xs text-zinc-500">{{ count($station['levels'] ?? []) }} {{ $searching ? 'nível(is) com o item' : 'níveis' }}</span>
                     <span class="text-zinc-600 transition"
-                          :class="({{ $searching ? 'true' : 'open === id' }}) ? 'rotate-90' : ''">▸</span>
+                          :class="({{ $searching ? 'true' : 'expanded === id' }}) ? 'rotate-90' : ''">▸</span>
                 </button>
 
                 <div x-cloak
                      x-show="{{ $searching ? 'true' : 'open === id' }}"
-                     x-transition.opacity.duration.120ms
-                     class="grid grid-cols-1 gap-3 border-t border-zinc-800 p-4 xl:grid-cols-2">
+                     class="grid grid-cols-1 gap-3 border-t border-zinc-800 p-4 md:grid-cols-2 xl:grid-cols-3">
                     @foreach ($station['levels'] ?? [] as $level)
-                        <div wire:key="level-{{ $station['id'] }}-{{ $level['level'] }}" class="rounded-lg border border-zinc-800/80 bg-[#181c26] p-3">
+                        <div wire:key="level-{{ $station['id'] }}-{{ $level['level'] }}" class="min-w-0 rounded-lg border border-zinc-800/80 bg-[#181c26] p-3">
                             <div class="mb-2 flex items-center justify-between">
                                 <p class="font-semibold text-amber-300">Nível {{ $level['level'] }}</p>
                                 <p class="text-xs text-zinc-500">Construção: {{ $fmtTime($level['constructionTime'] ?? 0) }}</p>
@@ -69,15 +93,15 @@
                                             $price = $req['item']['lastLowPrice'] ?? $req['item']['avg24hPrice'];
                                             $isMatch = $searching && str_contains(mb_strtolower($req['item']['name'] ?? ''), $needle);
                                         @endphp
-                                        <li class="flex items-center gap-2 rounded text-sm {{ $isMatch ? 'bg-amber-400/10 px-1 py-0.5 font-medium text-amber-300' : 'text-zinc-300' }}">
+                                        <li class="flex min-w-0 items-center gap-2 rounded text-sm {{ $isMatch ? 'bg-amber-400/10 px-1 py-0.5 font-medium text-amber-300' : 'text-zinc-300' }}">
                                             @if (! empty($req['item']['iconLink']))
                                                 <img src="{{ $req['item']['iconLink'] }}" alt="" class="h-10 w-10 rounded bg-zinc-900 object-contain" loading="lazy">
                                             @endif
-                                            <span class="flex-1">
+                                            <span class="min-w-0 flex-1 break-words">
                                                 {{ number_format($req['count'], 0, ',', '.') }}× {{ $req['item']['name'] }}
                                             </span>
                                             @if ($price)
-                                                <x-price :value="$price * $req['count']" class="text-xs text-zinc-500" />
+                                                <x-price :value="$price * $req['count']" class="shrink-0 text-xs text-zinc-500" />
                                             @endif
                                         </li>
                                     @endforeach
