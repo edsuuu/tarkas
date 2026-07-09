@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
         $role = Role::findOrCreate('Tecnologia', 'web');
         $role->syncPermissions([$permission]);
 
+        Role::findOrCreate('PMC', 'web');
+
         $user = User::updateOrCreate([
             'email' => $logViewerUser['email'],
         ], [

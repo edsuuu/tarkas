@@ -39,11 +39,20 @@
             @if ($navControls !== '')
                 {!! $navControls !!}
             @endif
-            <div class="ml-auto flex items-center gap-1">
+            <div class="ml-auto flex items-center gap-2">
                 @auth
                     @can('viewLogViewer')
                         <x-nav-link :href="route('log-viewer.index')" :active="request()->is('log-viewer*')" :navigate="false">Logs</x-nav-link>
                     @endcan
+                    <span class="hidden items-center gap-2 whitespace-nowrap text-sm text-zinc-400 sm:flex">
+                        {{ auth()->user()->name }}
+                        @php($userRole = auth()->user()->getRoleNames()->first())
+                        @if ($userRole)
+                            <span class="rounded-full border px-2 py-0.5 text-xs font-semibold {{ $userRole === 'Tecnologia' ? 'border-amber-500/40 bg-amber-500/10 text-amber-400' : 'border-zinc-700 bg-zinc-800 text-zinc-300' }}">
+                                {{ $userRole }}
+                            </span>
+                        @endif
+                    </span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200">
@@ -52,6 +61,7 @@
                     </form>
                 @else
                     <x-nav-link :href="route('login')" :active="request()->routeIs('login')" :navigate="false">Entrar</x-nav-link>
+                    <x-nav-link :href="route('register')" :active="request()->routeIs('register')" :navigate="false">Cadastrar</x-nav-link>
                 @endauth
             </div>
         </div>

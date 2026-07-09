@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Livewire\Dashboard;
 use App\Livewire\Items\Index;
 use App\Livewire\Items\Show;
@@ -11,6 +12,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
         ->middleware('throttle:5,1')
         ->name('login.store');
+
+    Route::get('/cadastro', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/cadastro', [RegisteredUserController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('register.store');
 });
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
