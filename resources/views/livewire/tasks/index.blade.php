@@ -14,20 +14,52 @@
                 <option value="{{ $t }}">{{ $t }}</option>
             @endforeach
         </select>
+        <select wire:model.live="map"
+                class="rounded-lg border border-zinc-700 bg-[#1a1d26] px-3 py-2 text-sm text-zinc-200 focus:border-amber-500 focus:outline-none">
+            <option value="">Todos os mapas</option>
+            @foreach ($maps as $m)
+                <option value="{{ $m }}">{{ $m }}</option>
+            @endforeach
+        </select>
         <label class="flex cursor-pointer items-center gap-2 text-sm text-zinc-300">
             <input type="checkbox" wire:model.live="kappa" class="h-4 w-4 rounded border-zinc-600 bg-[#1a1d26] accent-amber-500">
             Só Kappa
         </label>
+        <label class="flex cursor-pointer items-center gap-2 text-sm text-zinc-300">
+            <input type="checkbox" wire:model.live="lightkeeper" class="h-4 w-4 rounded border-zinc-600 bg-[#1a1d26] accent-amber-500">
+            Só Lightkeeper
+        </label>
+        @auth
+            <label class="flex cursor-pointer items-center gap-2 text-sm text-zinc-300">
+                <input type="checkbox" wire:model.live="hideCompleted" class="h-4 w-4 rounded border-zinc-600 bg-[#1a1d26] accent-emerald-500">
+                Esconder concluídas
+            </label>
+            <span class="rounded-full bg-emerald-400/10 px-2.5 py-0.5 text-sm font-medium text-emerald-300">✓ {{ $doneCount }} concluídas</span>
+        @else
+            <span class="text-sm text-zinc-500">
+                <a href="{{ route('login') }}" class="text-amber-400 hover:text-amber-300">Entre</a>
+                para salvar suas quests concluídas
+            </span>
+        @endauth
         <span class="text-sm text-zinc-500">{{ $total }} quests</span>
         <div wire:loading.delay class="text-sm text-amber-400">Carregando…</div>
     </div>
 
     <x-api-error :message="$error" />
 
-    <div class="columns-1 gap-3 md:columns-2 xl:columns-3">
+    <div class="grid grid-cols-1 items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
         @foreach ($tasks as $task)
-            <details wire:key="task-{{ $task['id'] }}" class="group mb-3 break-inside-avoid rounded-xl border border-zinc-800 bg-[#14171f] open:border-zinc-700">
+            @php $isDone = isset($completedIds[$task['id']]); @endphp
+            <details wire:key="task-{{ $task['id'] }}" class="group rounded-xl border bg-[#14171f] {{ $isDone ? 'border-emerald-900/60 opacity-60' : 'border-zinc-800' }} open:border-zinc-700">
                 <summary class="flex cursor-pointer items-center gap-3 p-4">
+                    @auth
+                        <button type="button"
+                                wire:click.stop.prevent="toggleCompleted('{{ $task['id'] }}')"
+                                title="{{ $isDone ? 'Desmarcar quest concluída' : 'Marcar como concluída' }}"
+                                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-sm transition {{ $isDone ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300' : 'border-zinc-700 text-zinc-600 hover:border-emerald-500/60 hover:text-emerald-400' }}">
+                            ✓
+                        </button>
+                    @endauth
                     @if (! empty($task['trader']['imageLink']))
                         <img src="{{ $task['trader']['imageLink'] }}" alt="{{ $task['trader']['name'] ?? '' }}"
                              class="h-10 w-10 shrink-0 rounded-lg object-cover" loading="lazy">
