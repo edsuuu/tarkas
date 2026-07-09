@@ -5,6 +5,8 @@
     </div>
 
     <div class="mb-4 flex flex-wrap items-center gap-3">
+        <input type="search" wire:model.live.debounce.400ms="search" placeholder="Buscar item, recompensa ou quest…"
+               class="w-full max-w-xs rounded-lg border border-zinc-700 bg-[#1a1d26] px-4 py-2 text-sm text-zinc-200 placeholder-zinc-500 focus:border-amber-500 focus:outline-none">
         <select wire:model.live="trader"
                 class="rounded-lg border border-zinc-700 bg-[#1a1d26] px-3 py-2 text-sm text-zinc-200 focus:border-amber-500 focus:outline-none">
             <option value="">Todos os traders</option>
@@ -12,6 +14,10 @@
                 <option value="{{ $t }}">{{ $t }}</option>
             @endforeach
         </select>
+        <label class="flex cursor-pointer items-center gap-2 text-sm text-zinc-300">
+            <input type="checkbox" wire:model.live="profitable" class="h-4 w-4 rounded border-zinc-600 bg-[#1a1d26] accent-amber-500">
+            Só lucrativas
+        </label>
         <span class="text-sm text-zinc-500">{{ $total }} trocas, ordenadas por lucro</span>
         <div wire:loading.delay class="text-sm text-amber-400">Carregando…</div>
     </div>

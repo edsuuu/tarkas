@@ -6,6 +6,20 @@
 
     <x-api-error :message="$error" />
 
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+        <input type="search" wire:model.live.debounce.400ms="search" placeholder="Buscar trader, moeda ou descrição…"
+               class="w-full max-w-xs rounded-lg border border-zinc-700 bg-[#1a1d26] px-4 py-2 text-sm text-zinc-200 placeholder-zinc-500 focus:border-amber-500 focus:outline-none">
+        <select wire:model.live="currency"
+                class="rounded-lg border border-zinc-700 bg-[#1a1d26] px-3 py-2 text-sm text-zinc-200 focus:border-amber-500 focus:outline-none">
+            <option value="">Todas as moedas</option>
+            @foreach ($currencies as $c)
+                <option value="{{ $c }}">{{ $c }}</option>
+            @endforeach
+        </select>
+        <span class="text-sm text-zinc-500">{{ $total }} traders</span>
+        <div wire:loading.delay class="text-sm text-amber-400">Carregando…</div>
+    </div>
+
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         @foreach ($traders as $trader)
             <div class="rounded-xl border border-zinc-800 bg-[#14171f] p-4">
@@ -63,4 +77,8 @@
             </div>
         @endforeach
     </div>
+
+    @if (! $error && $traders->isEmpty())
+        <p class="py-8 text-center text-zinc-500">Nenhum trader encontrado com esses filtros.</p>
+    @endif
 </div>
