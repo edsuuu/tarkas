@@ -1,0 +1,7 @@
+query ($lang: LanguageCode) {
+    traders(lang: $lang) {
+        id name normalizedName description resetTime imageLink
+        currency { name }
+        levels { level requiredPlayerLevel requiredReputation requiredCommerce payRate insuranceRate repairCostMultiplier }
+    }
+}

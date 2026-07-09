@@ -1,0 +1,13 @@
+# Busca por nome (traduzido — lang: pt busca em português).
+query ($name: String, $lang: LanguageCode, $limit: Int, $offset: Int) {
+    items(name: $name, lang: $lang, limit: $limit, offset: $offset) {
+        ...itemDaLista
+    }
+}
+
+fragment itemDaLista on Item {
+    id name shortName iconLink avg24hPrice lastLowPrice changeLast48hPercent
+    basePrice width height weight types
+    category { name }
+    sellFor { price currency priceRUB vendor { name normalizedName } }
+}

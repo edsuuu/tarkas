@@ -1,0 +1,9 @@
+query ($lang: LanguageCode) {
+    maps(lang: $lang) {
+        id name normalizedName description wiki raidDuration players enemies
+        bosses { spawnChance boss { name imagePortraitLink } }
+        extracts { id name faction }
+        accessKeys { name }
+        accessKeysMinPlayerLevel
+    }
+}

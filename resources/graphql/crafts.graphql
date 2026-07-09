@@ -1,0 +1,8 @@
+query ($lang: LanguageCode) {
+    crafts(lang: $lang) {
+        id duration level
+        station { name }
+        requiredItems { item { id name iconLink avg24hPrice lastLowPrice } count }
+        rewardItems { item { id name iconLink avg24hPrice lastLowPrice } count }
+    }
+}

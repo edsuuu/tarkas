@@ -1,0 +1,12 @@
+query ($lang: LanguageCode) {
+    hideoutStations(lang: $lang) {
+        id name normalizedName imageLink
+        levels {
+            level constructionTime
+            itemRequirements { item { id name iconLink avg24hPrice lastLowPrice } count }
+            stationLevelRequirements { station { name } level }
+            traderRequirements { trader { name } level }
+            skillRequirements { name level }
+        }
+    }
+}

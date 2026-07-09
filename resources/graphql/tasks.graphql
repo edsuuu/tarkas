@@ -1,0 +1,14 @@
+query ($lang: LanguageCode) {
+    tasks(lang: $lang) {
+        id name minPlayerLevel experience kappaRequired lightkeeperRequired wikiLink
+        trader { name imageLink }
+        map { name }
+        taskRequirements { task { name } }
+        objectives { description type maps { name } }
+        finishRewards {
+            items { item { name iconLink } count }
+            offerUnlock { trader { name } }
+            traderStanding { trader { name } standing }
+        }
+    }
+}

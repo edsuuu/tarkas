@@ -1,0 +1,17 @@
+query ($id: ID, $lang: LanguageCode) {
+    item(id: $id, lang: $lang) {
+        id name shortName description iconLink gridImageLink inspectImageLink wikiLink
+        basePrice weight width height
+        avg24hPrice low24hPrice high24hPrice lastLowPrice changeLast48hPercent
+        updated fleaMarketFee types
+        category { name }
+        sellFor { price currency priceRUB vendor { name normalizedName } }
+        buyFor { price currency priceRUB vendor { name normalizedName } }
+        usedInTasks { id name trader { name } }
+        craftsFor { id station { name } level }
+        craftsUsing { id station { name } level }
+        bartersFor { id trader { name } level }
+        bartersUsing { id trader { name } level }
+        historicalPrices { price timestamp }
+    }
+}

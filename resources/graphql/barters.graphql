@@ -1,0 +1,9 @@
+query ($lang: LanguageCode) {
+    barters(lang: $lang) {
+        id level
+        trader { name }
+        taskUnlock { name }
+        requiredItems { item { id name iconLink lastLowPrice avg24hPrice } count }
+        rewardItems { item { id name iconLink avg24hPrice lastLowPrice sellFor { priceRUB vendor { name normalizedName } } } count }
+    }
+}

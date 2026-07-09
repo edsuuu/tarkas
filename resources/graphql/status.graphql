@@ -1,0 +1,7 @@
+{
+    status {
+        generalStatus { name message status statusCode }
+        currentStatuses { name message status statusCode }
+        messages { time type content solveTime }
+    }
+}

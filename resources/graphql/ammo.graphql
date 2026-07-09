@@ -1,0 +1,7 @@
+query ($lang: LanguageCode) {
+    ammo(lang: $lang) {
+        item { id name shortName iconLink avg24hPrice lastLowPrice }
+        caliber penetrationPower damage armorDamage fragmentationChance
+        initialSpeed tracer projectileCount accuracyModifier recoilModifier
+    }
+}

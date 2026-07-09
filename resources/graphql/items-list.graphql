@@ -1,0 +1,14 @@
+# Listagem sem termo de busca — a API rejeita name: "" ou name: null,
+# por isso existe uma query separada de items-search.graphql.
+query ($lang: LanguageCode, $limit: Int, $offset: Int) {
+    items(lang: $lang, limit: $limit, offset: $offset) {
+        ...itemDaLista
+    }
+}
+
+fragment itemDaLista on Item {
+    id name shortName iconLink avg24hPrice lastLowPrice changeLast48hPercent
+    basePrice width height weight types
+    category { name }
+    sellFor { price currency priceRUB vendor { name normalizedName } }
+}
