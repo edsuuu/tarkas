@@ -5,6 +5,10 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +19,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $logViewerUser = [
+            'name' => 'Tecnologia',
+            'email' => 'tecnologia@tarkas.local',
+            'password' => '123',
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $permission = Permission::findOrCreate('log-viewer.view', 'web');
+        $role = Role::findOrCreate('Tecnologia', 'web');
+        $role->syncPermissions([$permission]);
+
+        $user = User::updateOrCreate([
+            'email' => $logViewerUser['email'],
+        ], [
+            'name' => $logViewerUser['name'],
+            'password' => Hash::make($logViewerUser['password']),
+            'email_verified_at' => now(),
         ]);
+
+        $user->syncRoles([$role]);
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

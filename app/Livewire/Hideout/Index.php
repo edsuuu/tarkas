@@ -11,19 +11,11 @@ class Index extends Component
     #[Url(as: 'q')]
     public string $search = '';
 
-    /** Estação atualmente expandida (accordion controlado, uma por vez). */
-    public ?string $open = null;
-
-    public function toggle(string $stationId): void
-    {
-        $this->open = $this->open === $stationId ? null : $stationId;
-    }
-
     public function render()
     {
         $error = null;
-        $stations = collect();
         $searching = trim($this->search) !== '';
+        $stations = collect();
 
         try {
             $stations = collect(app(TarkovDevService::class)->hideoutStations())
@@ -51,6 +43,8 @@ class Index extends Component
         } catch (\Throwable $e) {
             $error = $e->getMessage();
         }
+
+        $stations = $stations->values();
 
         return view('livewire.hideout.index', compact('stations', 'searching', 'error'))
             ->title('Hideout — Tarkas');

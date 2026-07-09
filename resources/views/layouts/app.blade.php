@@ -3,7 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? 'Tarkas — Escape from Tarkov' }}</title>
+    @php
+        $yieldTitle = trim($__env->yieldContent('title'));
+        $pageTitle = $title ?? ($yieldTitle !== '' ? $yieldTitle : 'Tarkas — Escape from Tarkov');
+        $mainClass = trim($__env->yieldContent('main_class')) ?: 'mx-auto max-w-7xl px-4 py-6';
+        $hideFooter = trim($__env->yieldContent('hide_footer')) === '1';
+        $navControls = trim($__env->yieldContent('nav_controls'));
+    @endphp
+    <title>{{ $pageTitle }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -11,6 +18,7 @@
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="min-h-screen bg-[#0c0e12] text-zinc-200 antialiased">
@@ -28,15 +36,39 @@
             <x-nav-link :href="route('barters.index')" :active="request()->routeIs('barters.*')">Trocas</x-nav-link>
             <x-nav-link :href="route('crafts.index')" :active="request()->routeIs('crafts.*')">Crafts</x-nav-link>
             <x-nav-link :href="route('maps.index')" :active="request()->routeIs('maps.*')">Mapas</x-nav-link>
+            @if ($navControls !== '')
+                {!! $navControls !!}
+            @endif
+            <div class="ml-auto flex items-center gap-1">
+                @auth
+                    @can('viewLogViewer')
+                        <x-nav-link :href="route('log-viewer.index')" :active="request()->is('log-viewer*')" :navigate="false">Logs</x-nav-link>
+                    @endcan
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200">
+                            Sair
+                        </button>
+                    </form>
+                @else
+                    <x-nav-link :href="route('login')" :active="request()->routeIs('login')" :navigate="false">Entrar</x-nav-link>
+                @endauth
+            </div>
         </div>
     </nav>
 
-    <main class="mx-auto max-w-7xl px-4 py-6">
-        {{ $slot }}
+    <main class="{{ $mainClass }}">
+        @isset($slot)
+            {{ $slot }}
+        @else
+            @yield('content')
+        @endisset
     </main>
 
-    <footer class="mx-auto max-w-7xl border-t border-zinc-900 px-4 pb-8 pt-4 text-center text-xs text-zinc-600">
-        Dados da API GraphQL pública de <a href="https://tarkov.dev" target="_blank" class="underline hover:text-zinc-400">tarkov.dev</a> — sem autenticação. Este site não é afiliado à Battlestate Games.
-    </footer>
+    @unless ($hideFooter)
+        <footer class="mx-auto max-w-7xl border-t border-zinc-900 px-4 pb-8 pt-4 text-center text-xs text-zinc-600">
+            Dados da API GraphQL pública de <a href="https://tarkov.dev" target="_blank" class="underline hover:text-zinc-400">tarkov.dev</a> — sem autenticação. Este site não é afiliado à Battlestate Games.
+        </footer>
+    @endunless
 </body>
 </html>
