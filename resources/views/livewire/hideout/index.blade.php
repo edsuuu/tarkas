@@ -65,7 +65,7 @@
 
     <div class="grid grid-cols-1 items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
         @foreach ($stations as $station)
-            <div wire:key="station-{{ $station['id'] }}"
+            <div wire:key="station-{{ $station['id'] }}-{{ $filtering ? 'filtrado' : 'normal' }}"
                  x-data="{ id: @js($station['id']) }"
                  class="min-w-0 overflow-hidden rounded-xl border bg-[#14171f]"
                  :class="{!! $filtering ? "'border-amber-500/30'" : "(expanded === id) ? 'border-amber-500/30 md:col-span-2 xl:col-span-3' : 'border-zinc-800'" !!}">
