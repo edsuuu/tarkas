@@ -68,7 +68,7 @@
             <div wire:key="station-{{ $station['id'] }}"
                  x-data="{ id: @js($station['id']) }"
                  class="min-w-0 overflow-hidden rounded-xl border bg-[#14171f]"
-                 :class="({{ $filtering ? 'true' : 'expanded === id' }}) ? 'border-amber-500/30 md:col-span-2 xl:col-span-3' : 'border-zinc-800'">
+                 :class="{!! $filtering ? "'border-amber-500/30'" : "(expanded === id) ? 'border-amber-500/30 md:col-span-2 xl:col-span-3' : 'border-zinc-800'" !!}">
                 <button type="button"
                         @if (! $filtering) @click="toggle(id)" @endif
                         class="flex min-w-0 w-full items-center gap-3 p-4 text-left">
@@ -86,7 +86,7 @@
 
                 <div x-cloak
                      x-show="{{ $filtering ? 'true' : 'open === id' }}"
-                     class="grid grid-cols-1 gap-3 border-t border-zinc-800 p-4 md:grid-cols-2 xl:grid-cols-3">
+                     class="grid grid-cols-1 gap-3 border-t border-zinc-800 p-4 {{ $filtering ? '' : 'md:grid-cols-2 xl:grid-cols-3' }}">
                     @foreach ($station['levels'] ?? [] as $level)
                         <div wire:key="level-{{ $station['id'] }}-{{ $level['level'] }}" class="min-w-0 rounded-lg border border-zinc-800/80 bg-[#181c26] p-3">
                             <div class="mb-2 flex items-center justify-between">
