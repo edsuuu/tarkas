@@ -4,7 +4,10 @@ query ($lang: LanguageCode) {
         trader { name imageLink }
         map { name }
         taskRequirements { task { name } }
-        objectives { description type maps { name } }
+        objectives {
+            description type maps { name }
+            ... on TaskObjectiveItem { foundInRaid count }
+        }
         finishRewards {
             items { item { name iconLink } count }
             offerUnlock { trader { name } }
