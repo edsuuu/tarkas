@@ -7,7 +7,6 @@
         $yieldTitle = trim($__env->yieldContent('title'));
         $pageTitle = $title ?? ($yieldTitle !== '' ? $yieldTitle : 'Tarkas — Escape from Tarkov');
         $mainClass = trim($__env->yieldContent('main_class')) ?: 'mx-auto max-w-7xl px-4 py-6';
-        $hideFooter = trim($__env->yieldContent('hide_footer')) === '1';
         $navControls = trim($__env->yieldContent('nav_controls'));
     @endphp
     <title>{{ $pageTitle }}</title>
@@ -75,10 +74,5 @@
         @endisset
     </main>
 
-    @unless ($hideFooter)
-        <footer class="mx-auto max-w-7xl border-t border-zinc-900 px-4 pb-8 pt-4 text-center text-xs text-zinc-600">
-            Dados da API GraphQL pública de <a href="https://tarkov.dev" target="_blank" class="underline hover:text-zinc-400">tarkov.dev</a> — sem autenticação. Este site não é afiliado à Battlestate Games.
-        </footer>
-    @endunless
 </body>
 </html>
