@@ -37,8 +37,7 @@ class Index extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.traders.index', compact('traders', 'currencies', 'total', 'error'))
-            ->title('Traders — Tarkas');
+        return view('livewire.traders.index', compact('traders', 'currencies', 'total', 'error'));
     }
 
     private function traderMatches(array $trader, string $needle): bool

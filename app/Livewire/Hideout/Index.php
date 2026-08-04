@@ -76,7 +76,6 @@ class Index extends Component
 
         $stations = $stations->values();
 
-        return view('livewire.hideout.index', compact('stations', 'searching', 'filtering', 'levels', 'error'))
-            ->title('Hideout — Tarkas');
+        return view('livewire.hideout.index', compact('stations', 'searching', 'filtering', 'levels', 'error'));
     }
 }

@@ -72,7 +72,6 @@ class Index extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.ammo.index', compact('rows', 'calibers', 'error'))
-            ->title('Munição — Tarkas');
+        return view('livewire.ammo.index', compact('rows', 'calibers', 'error'));
     }
 }

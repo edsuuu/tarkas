@@ -21,7 +21,6 @@ class Dashboard extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.dashboard', compact('status', 'traders', 'error'))
-            ->title('Dashboard — Tarkas');
+        return view('livewire.dashboard', compact('status', 'traders', 'error'));
     }
 }

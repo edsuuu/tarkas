@@ -95,8 +95,7 @@ class Index extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.crafts.index', compact('crafts', 'stations', 'total', 'error'))
-            ->title('Crafts — Tarkas');
+        return view('livewire.crafts.index', compact('crafts', 'stations', 'total', 'error'));
     }
 
     private function craftMatches(array $craft, string $needle): bool

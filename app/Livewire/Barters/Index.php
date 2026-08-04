@@ -93,8 +93,7 @@ class Index extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.barters.index', compact('barters', 'traders', 'total', 'error'))
-            ->title('Trocas (Barters) — Tarkas');
+        return view('livewire.barters.index', compact('barters', 'traders', 'total', 'error'));
     }
 
     private function barterMatches(array $barter, string $needle): bool

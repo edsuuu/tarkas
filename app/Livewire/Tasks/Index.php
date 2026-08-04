@@ -103,8 +103,7 @@ class Index extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.tasks.index', compact('tasks', 'traders', 'maps', 'total', 'error', 'completedIds', 'doneCount'))
-            ->title('Quests — Tarkas');
+        return view('livewire.tasks.index', compact('tasks', 'traders', 'maps', 'total', 'error', 'completedIds', 'doneCount'));
     }
 
     private function taskHasMap(array $task, string $map): bool

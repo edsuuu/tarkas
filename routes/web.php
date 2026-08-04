@@ -2,16 +2,6 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Livewire\Ammo\Index as AmmoIndex;
-use App\Livewire\Barters\Index as BartersIndex;
-use App\Livewire\Crafts\Index as CraftsIndex;
-use App\Livewire\Dashboard;
-use App\Livewire\Hideout\Index as HideoutIndex;
-use App\Livewire\Items\Index as ItemsIndex;
-use App\Livewire\Items\Show as ItemsShow;
-use App\Livewire\Maps\Index as MapsIndex;
-use App\Livewire\Tasks\Index as TasksIndex;
-use App\Livewire\Traders\Index as TradersIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -31,14 +21,14 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
 Route::middleware('throttle:60,1')->group(function () {
-    Route::get('/', Dashboard::class)->name('dashboard');
-    Route::get('/itens', ItemsIndex::class)->name('items.index');
-    Route::get('/itens/{id}', ItemsShow::class)->name('items.show');
-    Route::get('/municao', AmmoIndex::class)->name('ammo.index');
-    Route::get('/quests', TasksIndex::class)->name('tasks.index');
-    Route::get('/hideout', HideoutIndex::class)->name('hideout.index');
-    Route::get('/traders', TradersIndex::class)->name('traders.index');
-    Route::get('/trocas', BartersIndex::class)->name('barters.index');
-    Route::get('/crafts', CraftsIndex::class)->name('crafts.index');
-    Route::get('/mapas', MapsIndex::class)->name('maps.index');
+    Route::view('/', 'pages.dashboard')->name('dashboard');
+    Route::view('/itens', 'pages.items')->name('items.index');
+    Route::view('/itens/{id}', 'pages.item')->name('items.show');
+    Route::view('/municao', 'pages.ammo')->name('ammo.index');
+    Route::view('/quests', 'pages.tasks')->name('tasks.index');
+    Route::view('/hideout', 'pages.hideout')->name('hideout.index');
+    Route::view('/traders', 'pages.traders')->name('traders.index');
+    Route::view('/trocas', 'pages.barters')->name('barters.index');
+    Route::view('/crafts', 'pages.crafts')->name('crafts.index');
+    Route::view('/mapas', 'pages.maps')->name('maps.index');
 });

@@ -25,7 +25,6 @@ class Show extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.items.show', compact('item', 'error'))
-            ->title(($item['name'] ?? 'Item').' — Tarkas');
+        return view('livewire.items.show', compact('item', 'error'));
     }
 }

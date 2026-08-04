@@ -54,8 +54,7 @@ class Index extends Component
             $error = $e->getMessage();
         }
 
-        return view('livewire.maps.index', compact('maps', 'bosses', 'total', 'error'))
-            ->title('Mapas — Tarkas');
+        return view('livewire.maps.index', compact('maps', 'bosses', 'total', 'error'));
     }
 
     private function englishMapName(array $map): string

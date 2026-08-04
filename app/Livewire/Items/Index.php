@@ -57,7 +57,6 @@ class Index extends Component
             }
         }
 
-        return view('livewire.items.index', compact('items', 'error', 'selectedItem'))
-            ->title('Itens & Flea Market — Tarkas');
+        return view('livewire.items.index', compact('items', 'error', 'selectedItem'));
     }
 }
