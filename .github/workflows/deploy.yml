@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.repository == 'edsuuu/tarkas' && github.actor == 'edsuuu'
+    runs-on: [self-hosted, Linux, X64, tarkas-main]
+    environment: production
+    timeout-minutes: 15
+    steps:
+      - name: Executar script de deploy na VPS
+        run: /home/ubuntu/scripts/deploy-tarkas.sh
