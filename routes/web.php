@@ -2,9 +2,16 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Livewire\Ammo\Index as AmmoIndex;
+use App\Livewire\Barters\Index as BartersIndex;
+use App\Livewire\Crafts\Index as CraftsIndex;
 use App\Livewire\Dashboard;
-use App\Livewire\Items\Index;
-use App\Livewire\Items\Show;
+use App\Livewire\Hideout\Index as HideoutIndex;
+use App\Livewire\Items\Index as ItemsIndex;
+use App\Livewire\Items\Show as ItemsShow;
+use App\Livewire\Maps\Index as MapsIndex;
+use App\Livewire\Tasks\Index as TasksIndex;
+use App\Livewire\Traders\Index as TradersIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -23,13 +30,15 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/', Dashboard::class)->name('dashboard');
-Route::get('/itens', Index::class)->name('items.index');
-Route::get('/itens/{id}', Show::class)->name('items.show');
-Route::get('/municao', App\Livewire\Ammo\Index::class)->name('ammo.index');
-Route::get('/quests', App\Livewire\Tasks\Index::class)->name('tasks.index');
-Route::get('/hideout', App\Livewire\Hideout\Index::class)->name('hideout.index');
-Route::get('/traders', App\Livewire\Traders\Index::class)->name('traders.index');
-Route::get('/trocas', App\Livewire\Barters\Index::class)->name('barters.index');
-Route::get('/crafts', App\Livewire\Crafts\Index::class)->name('crafts.index');
-Route::get('/mapas', App\Livewire\Maps\Index::class)->name('maps.index');
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/', Dashboard::class)->name('dashboard');
+    Route::get('/itens', ItemsIndex::class)->name('items.index');
+    Route::get('/itens/{id}', ItemsShow::class)->name('items.show');
+    Route::get('/municao', AmmoIndex::class)->name('ammo.index');
+    Route::get('/quests', TasksIndex::class)->name('tasks.index');
+    Route::get('/hideout', HideoutIndex::class)->name('hideout.index');
+    Route::get('/traders', TradersIndex::class)->name('traders.index');
+    Route::get('/trocas', BartersIndex::class)->name('barters.index');
+    Route::get('/crafts', CraftsIndex::class)->name('crafts.index');
+    Route::get('/mapas', MapsIndex::class)->name('maps.index');
+});
