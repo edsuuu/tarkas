@@ -19,9 +19,7 @@ class TarkovDevService
     /** Quests, hideout e mapas mudam só em patch — 6 horas. */
     public const TTL_ESTATICO = 21600;
 
-    public function __construct(protected TarkovDevClient $client)
-    {
-    }
+    public function __construct(protected TarkovDevClient $client) {}
 
     public function status(): array
     {
@@ -90,12 +88,12 @@ class TarkovDevService
     /**
      * Executa a query de resources/graphql/{$file}.graphql com cache.
      *
-     * @param string      $file      nome do arquivo .graphql (sem extensão)
-     * @param int         $ttl       validade do cache principal, em segundos
-     * @param array       $variables variáveis além de lang (limit, name, id…)
-     * @param string|null $cacheKey  chave de cache; por padrão, o nome do arquivo
-     * @param bool        $lang      inclui a variável lang (só status não usa)
-     * @param bool        $keepStale guarda cópia stale para fallback de API fora
+     * @param  string  $file  nome do arquivo .graphql (sem extensão)
+     * @param  int  $ttl  validade do cache principal, em segundos
+     * @param  array  $variables  variáveis além de lang (limit, name, id…)
+     * @param  string|null  $cacheKey  chave de cache; por padrão, o nome do arquivo
+     * @param  bool  $lang  inclui a variável lang (só status não usa)
+     * @param  bool  $keepStale  guarda cópia stale para fallback de API fora
      */
     protected function query(
         string $file,
