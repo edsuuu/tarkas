@@ -138,17 +138,21 @@ class TarkovDevService
             'message' => $original->getMessage(),
         ]);
 
+        $assetsUrl = (string) config('services.tarkov.assets_url');
         $ammo = [];
 
         foreach ($rows as $row) {
             $ballistics = $row['ballistics'] ?? [];
+            $id = $row['id'] ?? null;
 
             $ammo[] = [
                 'item' => [
-                    'id' => $row['id'] ?? null,
+                    'id' => $id,
                     'name' => $row['name'] ?? null,
                     'shortName' => $row['shortName'] ?? null,
-                    'iconLink' => null,
+                    // O CDN de assets fica fora da API e continua de pé nas
+                    // quedas dela; o id do item é o mesmo nas duas fontes.
+                    'iconLink' => is_null($id) ? null : "{$assetsUrl}/{$id}-icon.webp",
                     'avg24hPrice' => null,
                     'lastLowPrice' => null,
                 ],
