@@ -47,8 +47,8 @@ class AmmoFallbackTest extends TestCase
         $this->assertSame(330, $ammo[0]['initialSpeed']);
     }
 
-    /** Preço e ícone são exclusivos do tarkov.dev: vêm nulos, nunca ausentes. */
-    public function test_price_and_icon_are_null_but_present(): void
+    /** Preço não tem substituto e vem nulo, mas presente — a tela mostra "—". */
+    public function test_price_is_null_but_present(): void
     {
         Http::fake([
             'api.tarkov.dev/*' => Http::response(['errors' => ['down']], 422),
@@ -58,9 +58,23 @@ class AmmoFallbackTest extends TestCase
         $item = app(TarkovDevService::class)->ammo()[0]['item'];
 
         $this->assertArrayHasKey('avg24hPrice', $item);
-        $this->assertArrayHasKey('iconLink', $item);
         $this->assertNull($item['avg24hPrice']);
-        $this->assertNull($item['iconLink']);
+    }
+
+    /** O ícone é remontado pelo id: o CDN de assets sobrevive à queda da API. */
+    public function test_icon_is_rebuilt_from_the_item_id(): void
+    {
+        Http::fake([
+            'api.tarkov.dev/*' => Http::response(['errors' => ['down']], 422),
+            'raw.githubusercontent.com/*' => Http::response([self::TARKOVDATA_ROW]),
+        ]);
+
+        $item = app(TarkovDevService::class)->ammo()[0]['item'];
+
+        $this->assertSame(
+            'https://assets.tarkov.dev/573720e02459776143012541-icon.webp',
+            $item['iconLink']
+        );
     }
 
     /** Se o fallback também cair, o erro do tarkov.dev é que chega na tela. */

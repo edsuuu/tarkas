@@ -38,6 +38,7 @@ return [
     'tarkov' => [
         'api_url' => env('TARKOV_API_URL', 'https://api.tarkov.dev/graphql'),
         'data_url' => env('TARKOV_DATA_URL', 'https://raw.githubusercontent.com/TarkovTracker/tarkovdata/master'),
+        'assets_url' => env('TARKOV_ASSETS_URL', 'https://assets.tarkov.dev'),
     ],
 
 ];
