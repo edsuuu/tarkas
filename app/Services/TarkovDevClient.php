@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
@@ -16,8 +19,6 @@ use RuntimeException;
  */
 class TarkovDevClient
 {
-    protected const ENDPOINT = 'https://api.tarkov.dev/graphql';
-
     public function query(string $cacheKey, int $ttl, string $query, array $variables = [], bool $keepStale = true): array
     {
         $cached = Cache::get("tarkov.{$cacheKey}");
@@ -47,6 +48,9 @@ class TarkovDevClient
         return $data;
     }
 
+    /**
+     * @throws ConnectionException
+     */
     protected function fetch(string $query, array $variables): array
     {
         $payload = ['query' => $query];
@@ -58,14 +62,21 @@ class TarkovDevClient
 
         $response = Http::timeout(45)
             ->retry(2, 500, throw: false)
-            ->post(self::ENDPOINT, $payload);
+            ->post((string) config('services.tarkov.api_url'), $payload);
 
         $json = $response->json();
 
         if (! $response->successful() || isset($json['errors'])) {
-            throw new RuntimeException(
-                'Erro na API tarkov.dev: '.($json['errors'][0]['message'] ?? 'HTTP '.$response->status())
-            );
+            // A API devolve errors ora como lista de strings ("GraphQL server
+            // unavailable"), ora como objetos {message}. Ler só [0]['message']
+            // engolia o primeiro caso e virava um "HTTP 422" sem explicação.
+            $first = $json['errors'][0] ?? null;
+
+            throw new RuntimeException('Erro na API tarkov.dev: '.match (true) {
+                is_string($first) => $first,
+                is_array($first) => $first['message'] ?? 'HTTP '.$response->status(),
+                default => 'HTTP '.$response->status(),
+            });
         }
 
         return $json['data'];
